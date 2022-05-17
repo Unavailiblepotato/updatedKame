@@ -8,6 +8,9 @@ void left(int);
 void right(int);
 void setPos(float);
 void servoInit();
+void jump();
+
+void timeServoMove(Servo, int, float);
 
 extern Servo S1;
 extern Servo S2;
