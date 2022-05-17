@@ -11,15 +11,32 @@ Servo S6;
 Servo S7;
 Servo S8;
 
+void timeServoMove(Servo servo, int angle, float time){ // moves to specific angle 
+    for(int x = 0; x < angle; x++){
+        servo.write(x);
+        delay(time/angle);
+    }
+}
+
 void servoInit() {
-    S1.attach(5);  //D1
-    S2.attach(4);  //D2
-    S3.attach(0);  //D3
-    S4.attach(2);  //D4
-    S5.attach(14); //D5
-    S6.attach(12); //D6
-    S7.attach(13); //D7
-    S8.attach(15); //D8    
+    S1.attach(5, 500, 2500);  //D1
+    S2.attach(4, 500, 2500);  //D2
+    S3.attach(0, 500, 2500);  //D3
+    S4.attach(2, 500, 2500);  //D4
+    S5.attach(14, 500, 2500); //D5
+    S6.attach(12, 500, 2500); //D6
+    S7.attach(13, 500, 2500); //D7
+    S8.attach(15, 500, 2500); //D8  
+    S1.write(30);
+    S2.write(50);
+    S3.write(90);
+    S4.write(90);
+    S5.write(50);
+    S6.write(30);
+    S7.write(90);
+    S8.write(90);  
+
+    timeServoMove(S5, 180, 500);
 }
 
 void start(){
@@ -53,7 +70,7 @@ void left(int angle){
 
 
 }
-void setPos(int pos){
+void setAllPos(int pos){
     S1.write(pos);
     S2.write(pos);
     S3.write(pos);
@@ -63,3 +80,9 @@ void setPos(int pos){
     S7.write(pos);
     S8.write(pos);
 }
+void jump(){
+
+
+}
+
+
