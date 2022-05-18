@@ -1,106 +1,117 @@
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
+//#include <ESP8266WiFi.h>
+//#include <ESP8266WebServer.h>
+#include "ESPAsyncWebServer.h"
 #include <Arduino.h>
 #include <robot.h>
+#include <FS.h>
+#include <WiFi.h>
+
 /* Put your SSID & Password */
 const char* ssid = "Kame";  // Enter SSID here
 const char* password = "12345670";  //Enter Password here
 
 /* Put IP Address details */
-IPAddress local_ip(192,168,1,1);
-IPAddress gateway(192,168,1,1);
-IPAddress subnet(255,255,255,0);
-String HTML()
-{
-  String msg="<!DOCTYPE html> <html>\n";
-  msg+="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-  msg+="<title>LED Control</title>\n";
-  msg+="<style>html{font-family:Helvetica; display:inline-block; margin:0px auto; text-align:center;}\n";
-  msg+="body{margin-top: 50px;} h1{color: #444444; margin: 50px auto 30px;} h3{color:#444444; margin-bottom: 50px;}\n";
-  msg+=".button{display:block; width:80px; background-color:#f48100; border:none; color:white; padding: 13px 30px; text-decoration:none; font-size:25px; margin: 0px auto 35px; cursor:pointer; border-radius:4px;}\n";
-  msg+=".button-on{background-color:#f48100;}\n";
-  msg+=".button-on:active{background-color:#f48100;}\n";
-  msg+=".button-off{background-color:#26282d;}\n";
-  msg+=".button-off:active{background-color:#26282d;}\n";
-  msg+="</style>\n";
-  msg+="</head>\n";
-  msg+="<body>\n";
-  msg+="<h1>ESP8266 Web Server</h1>\n";
-  msg+="<h3>Using Station (AP) Mode</h3>\n";
-  msg+="</body>\n";
-  msg+="</html>\n";
-  return msg;
-}
-ESP8266WebServer server(80);
-
-uint8_t LED1pin = D7;
-bool LED1status = LOW;
-
-uint8_t LED2pin = D6;
-bool LED2status = LOW;
+AsyncWebServer server(80);
 
 void handle_jump(){
-  server.send(200, "text/html", HTML());
+ Serial.println("jump");
 }
 
 void handle_OnConnect() {
-  server.send(200, "text/html", HTML()); 
+  ;
+
 }
 
 void handle_forward() {
 
-  server.send(200, "text/html", HTML()); 
+Serial.println("forward");
 }
 
 void handle_backward() {
-  server.send(200, "text/html", HTML()); 
+Serial.println("backward");
 }
 
 void handle_right() {
-
-  server.send(200, "text/html", HTML()); 
+Serial.println("right");
+;
 }
 
 void handle_left() {
-  server.send(200, "text/html", HTML()); 
+Serial.println("left");
 }
 
 void handle_NotFound(){
-  server.send(404, "text/plain", "Not found");
+Serial.println("notfound");
+}
+
+void handle_home(){
+ Serial.println("home");
+}
+void handle_auto(){
+ Serial.println("auto");
 }
 
 
 
-
-
-
-
-void setup() {
+void setup(){
   servoInit();
-  Serial.begin(115200);
-  pinMode(LED1pin, OUTPUT);
-  pinMode(LED2pin, OUTPUT);
+  Serial.begin(9600);
+  
+  !SPIFFS.begin();
+
 
   WiFi.softAP(ssid, password);
-  WiFi.softAPConfig(local_ip, gateway, subnet);
-
-  delay(100);
-  
-  server.on("/", handle_OnConnect);
-  server.on("/forward", handle_forward);
-  server.on("/right", handle_right);
-  server.on("/left", handle_left);
-  server.on("/backward", handle_backward);
-  server.on("/jump", jump);
-  server.on("/home", start);
-  server.onNotFound(handle_NotFound);
+ 
+  Serial.println();
+  Serial.print("IP address: ");
+  Serial.println(WiFi.softAPIP());
+ 
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", String(), false);
+    handle_OnConnect();
+  });
+  server.on("/forward", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->redirect("/");
+    handle_forward();
+  });
+  server.on("/left", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->redirect("/");
+    handle_left();
+  });
+  server.on("/right", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->redirect("/");
+    handle_right();
+  });
+  server.on("/backward", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->redirect("/");
+    handle_backward();
+  });
+  server.on("/jump", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->redirect("/");
+    handle_jump();
+  });
+  server.on("/home", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->redirect("/");
+    handle_home();
+  });
+  server.on("/auto", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->redirect("/");
+    handle_auto();
+  });
   server.begin();
 }
 
+
 void loop() {
-  server.handleClient();
 
 }
 
+String getContentType(String filename){
+  if(filename.endsWith(".htm")) return "text/html";
+  else if(filename.endsWith(".html")) return "text/html";
+  else if(filename.endsWith(".css")) return "text/css";
+  else if(filename.endsWith(".jpg")) return "image/jpeg";
+  return "text/plain";
+}
 
 
