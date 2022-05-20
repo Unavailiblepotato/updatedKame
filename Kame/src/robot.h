@@ -6,18 +6,11 @@ void forward(int);
 void backward(int);
 void left(int);
 void right(int);
-void setPos(float);
+void setAllPos(float, int);
 void servoInit();
 void jump();
+void homeAll(int);
 
 void timeServoMove(Servo, int, float);
 
-extern Servo S1;
-extern Servo S2;
-extern Servo S3;
-extern Servo S4;
-extern Servo S5;
-extern Servo S6;
-extern Servo S7;
-extern Servo S8;
 
