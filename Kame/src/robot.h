@@ -2,7 +2,7 @@
 #include <servo.h>
 
 void start();
-void forward(int);
+void forward();
 void backward(int);
 void left(int);
 void right(int);

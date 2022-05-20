@@ -5,7 +5,6 @@
 #include <robot.h>
 #include <FS.h>
 #include <WiFi.h>
-#define LED_BUILTIN 2
 #include "LittleFS.h"
 /* Put your SSID & Password */
 const char* ssid = "Kame";  // Enter SSID here
@@ -24,7 +23,7 @@ void handle_OnConnect() {
 }
 
 void handle_forward() {
-
+  forward();
 Serial.println("forward");
 }
 

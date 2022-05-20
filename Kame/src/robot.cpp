@@ -28,11 +28,10 @@ void servoInit() {
     servo[4].write(50);// 4 being the back left and 5 being the back right
     servo[5].write(30);
 
-
-    servo[2].write(90); //Figure out direction.
-    servo[3].write(90); //FIgure out oreintation.
-    servo[6].write(90);
-    servo[7].write(90);
+    servo[2].write(90); // -> 180 is up
+    servo[6].write(50); // -> 0 is up
+    servo[3].write(40);// -> 0 is up
+    servo[7].write(100); // -> 180 is up
 
 }
 
@@ -40,7 +39,19 @@ void start(){
 
 }
 
-void forward(int distance){
+void forward(){
+servo[2].write(120); // -> 180 is up
+delay(100);
+servo[0].write(90);
+delay(100);
+servo[2].write(90); // -> 180 is up
+
+servo[3].write(10);// -> 0 is up
+delay(100);
+servo[1].write(0);
+delay(100);
+servo[1].write(50);
+
 
 
 }
