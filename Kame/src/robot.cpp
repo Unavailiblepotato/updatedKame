@@ -40,19 +40,39 @@ void start(){
 }
 
 void forward(){
-servo[2].write(120); // -> 180 is up
-delay(100);
-servo[0].write(90);
-delay(100);
-servo[2].write(90); // -> 180 is up
+    int steps=10;
+    unsigned long time=10000;
 
-servo[3].write(10);// -> 0 is up
-delay(100);
-servo[1].write(0);
-delay(100);
-servo[1].write(50);
+        
+        //diag one body motors 1 -> 180, 4 -> 180
+        //diag one arm motors  3 -> 0, 6 -> 0
+        delay(time);  
+        servo[3].write(20); //pick up diag
+        servo[6].write(30);
+        delay(time);  
+        servo[1].write(90);//move the diag
+        servo[4].write(90);
+        delay(time);  
+        servo[3].write(40);//move diag down
+        servo[6].write(50);
 
+        delay(time);  
+        servo[1].write(40);//pull forward
+        servo[4].write(50);
 
+        delay(time);  
+
+        servo[0].write(30); // 0,1,4,5 are the center body servos
+        servo[1].write(50); // 0 being the front left and 1 being the front right
+        servo[4].write(50);// 4 being the back left and 5 being the back right
+        servo[5].write(30);
+
+        servo[2].write(90); // -> 180 is up
+        servo[6].write(50); // -> 0 is up
+        servo[3].write(40);// -> 0 is up
+        servo[7].write(100); // -> 180 is up
+        
+        delay(time);  
 
 }
 
